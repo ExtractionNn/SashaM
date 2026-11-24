@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Только для Вики ❤️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff0f3 0%, #ffdde1 100%);
+            background-image: radial-gradient(#ff8fa3 1px, transparent 1px);
+            background-size: 22px 22px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 36px 28px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.25);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .emoji-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 24px;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        p {
+            color: #590d22;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            min-height: 48px;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.35);
+        }
+
+        .btn-primary:hover {
+            background-color: #ff758f;
+            transform: scale(1.06);
+        }
+
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #dee2e6;
+        }
+
+        .error-msg {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            background: #ffe5ec;
+            color: #c9184a;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Падающие сердечки в финале */
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 24px;
+            animation: fall linear forwards;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(115vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- ЭКРАН 1: Проверка имени -->
+        <div class="screen active" id="screen1">
+            <span class="emoji-icon">🕵️‍♂️</span>
+            <h1>Привет! Тебя зовут Вика?</h1>
+            <p>Перед тем как пустить дальше, нужно убедиться, что это точно ты.</p>
+            <div class="buttons">
+                <button class="btn-primary" onclick="goToScreen(2)">Да, это я</button>
+                <button class="btn-secondary" onclick="denyAccess()">Нет</button>
+            </div>
+            <div class="error-msg" id="errorMsg">
+                Тогда тебе сюда нельзя! 🚫<br>Этот сайт сделан только для одной девушки.
+            </div>
+        </div>
+
+        <!-- ЭКРАН 2: Программистский момент -->
+        <div class="screen" id="screen2">
+            <span class="emoji-icon">😎💻</span>
+            <h1>Я же тебе говорил, что умею такое делать?</h1>
+            <p>Небольшой интерактив специально для тебя. Готова к паре вопросов?</p>
+            <div class="buttons">
+                <button class="btn-primary" onclick="goToScreen(3)">Дальше →</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 3: Ты скучаешь по мне? -->
+        <div class="screen" id="screen3">
+            <span class="emoji-icon">🥺✨</span>
+            <h1>Ты скучаешь по мне?</h1>
+            <p>Отвечай честно, система всё фиксирует.</p>
+            <div class="buttons">
+                <button class="btn-primary" onclick="goToScreen(4)">Да ❤️</button>
+                <button class="btn-secondary runaway-btn" id="noBtn3">Нет 🙈</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 4: Я тебе нравлюсь? -->
+        <div class="screen" id="screen4">
+            <span class="emoji-icon">💘</span>
+            <h1>И главный вопрос...<br>Я тебе нравлюсь?</h1>
+            <p>Подумай хорошо (хотя вариант выбора тут очевидный).</p>
+            <div class="buttons">
+                <button class="btn-primary" onclick="finish()">Да! ❤️</button>
+                <button class="btn-secondary runaway-btn" id="noBtn4">Нет 😜</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 5: Финал -->
+        <div class="screen" id="screen5">
+            <span class="emoji-icon">🥰💖</span>
+            <h1>Я так и знал!</h1>
+            <p>Улыбнись, хорошего тебе дня и отличного настроения ✨</p>
+        </div>
+    </div>
+
+    <script>
+        function goToScreen(num) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.runaway-btn').forEach(btn => {
+                btn.style.position = 'static';
+            });
+            document.getElementById('screen' + num).classList.add('active');
+        }
+
+        function denyAccess() {
+            document.getElementById('errorMsg').style.display = 'block';
+        }
+
+        function makeButtonRun(btn) {
+            function move() {
+                const maxX = window.innerWidth - btn.offsetWidth - 20;
+                const maxY = window.innerHeight - btn.offsetHeight - 20;
+
+                const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+                btn.style.position = 'fixed';
+                btn.style.left = randomX + 'px';
+                btn.style.top = randomY + 'px';
+            }
+
+            btn.addEventListener('mouseover', move);
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                move();
+            });
+        }
+
+        makeButtonRun(document.getElementById('noBtn3'));
+        makeButtonRun(document.getElementById('noBtn4'));
+
+        function finish() {
+            goToScreen(5);
+            setInterval(createHeart, 250);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            const emojis = ['❤️', '💖', '✨', '💕', '🥰'];
+            heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 4500);
+        }
+    </script>
+</body>
+</html>
